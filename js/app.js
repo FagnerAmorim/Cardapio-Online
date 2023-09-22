@@ -102,14 +102,14 @@ cardapio.metodos = {
             //obtem o item
             let item = $.grep(filtro, (e, i) => { return e.id == id });
 
-            if (item.lenght > 0) {
+            if (item.length > 0) {
 
                 //validar se ja existe esse item no carrinho
                 let existe = $.grep(MEU_CARRINHO, (elem, index) => { return elem.id == id});
 
                 //caso já exista o item no carrinho, só altera a quantidade
 
-                if (existe.lenght > 0) {
+                if (existe.length > 0) {
                     
                     let objIndex = MEU_CARRINHO.findIndex((obj => obj.id == id));
                     MEU_CARRINHO[objIndex].qntd = MEU_CARRINHO[objIndex].qntd + qntdAtual;
@@ -136,7 +136,7 @@ cardapio.metodos = {
 
         var total = 0;
 
-        $rach(MEU_CARRINHO, (i, e) => {
+        $.each(MEU_CARRINHO, (i, e) => {
             total += e.qntd
         })
 
@@ -159,6 +159,7 @@ cardapio.metodos = {
 
         if (abrir) {
             $("#modalCarrinho").removeClass('hidden');
+            cardapio.metodos.carregarEtapa(1);
         }
         else {
             $("#modalCarrinho").addClass('hidden');
@@ -170,17 +171,77 @@ cardapio.metodos = {
 
         let id = Math.floor(Date.now() * Math.random()).toString();
 
-        let msg = `<div id="msg-${id}" class="animeted fadeInDown toast ${cor}">${texto}</div`;
+        let msg = `<div id="msg-${id}" class="animated fadeInDown toast ${cor}">${texto}</div>`;
 
         $("#container-mensagens").append(msg);
 
         setTimeout(() => {
-            $("msg-" + id).removeClass('fadeInDown');
-            $("msg-" + id).addClass('fadeOutUp');
+            $("#msg-" + id).removeClass('fadeInDown');
+            $("#msg-" + id).addClass('fadeOutUp');
             setTimeout(() => {
-                $("msg-" + id).remove();
+                $("#msg-" + id).remove();
             },800);
         },tempo)
+    },
+
+    // altera os textos e exibe os botoes das etapas
+    carregarEtapa: (etapa) => {
+        if (etapa == 1) {
+
+            $("#lblTituloEtapa").text('Seu carrinho:')
+            $("#itensCarrinho").removeClass('hidden')
+            $("#localEntrega").addClass('hidden')
+            $("#resumoCarrinho").addClass('hidden')
+
+            $(".etapa").removeClass('active');
+            $(".etapa1").addClass('active');
+
+            $("#btnEtapaPedido").removeClass('hidden');
+            $("#btnEtapaEndereco").addClass('hidden');
+            $("#btnEtapaResumo").addClass('hidden');
+            $("#btnVoltar").addClass('hidden');
+
+        } if (etapa == 2) {
+
+            $("#lblTituloEtapa").text('Endereço de entrega:')
+            $("#itensCarrinho").addClass('hidden')
+            $("#localEntrega").removeClass('hidden')
+            $("#resumoCarrinho").addClass('hidden')
+
+            $(".etapa").removeClass('active');
+            $(".etapa1").addClass('active');
+            $(".etapa2").addClass('active');
+
+            $("#btnEtapaPedido").addClass('hidden');
+            $("#btnEtapaEndereco").removeClass('hidden');
+            $("#btnEtapaResumo").addClass('hidden');
+            $("#btnVoltar").removeClass('hidden');
+
+        } if (etapa == 3) {
+
+            $("#lblTituloEtapa").text('Resumo do pedido:')
+            $("#itensCarrinho").addClass('hidden')
+            $("#localEntrega").addClass('hidden')
+            $("#resumoCarrinho").removeClass('hidden')
+
+            $(".etapa").removeClass('active');
+            $(".etapa1").addClass('active');
+            $(".etapa2").addClass('active');
+            $(".etapa3").addClass('active');
+
+            $("#btnEtapaPedido").addClass('hidden');
+            $("#btnEtapaEndereco").addClass('hidden');
+            $("#btnEtapaResumo").removeClass('hidden');
+            $("#btnVoltar").removeClass('hidden');
+
+        }
+    },
+
+    // botão de voltar etapa
+    voltarEtapa: () => {
+        let etapa = $(".etapa.active").length;
+        cardapio.metodos.carregarEtapa(etapa - 1);
+
     }
  
 }
