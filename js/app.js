@@ -444,6 +444,64 @@ cardapio.metodos = {
         }
 
         cardapio.metodos.carregarEtapa(3);
+        cardapio.metodos.carregarResumo();
+        
+    },
+
+    // Carrega a etapa de Resumo do pedido
+    carregarResumo: () => {
+
+        $("#listaItensResumo").html('');
+
+        $.each(MEU_CARRINHO, (i, e) => {
+
+            let temp = cardapio.templates.itemResumo.replace(/\${img}/g, e.img)
+                .replace(/\${nome}/g, e.name)
+                .replace(/\${preco}/g, e.price.toFixed(2).replace('.',','))
+                .replace(/\${qntd}/g, e.qntd)
+
+            $("#listaItensResumo").append(temp);
+
+        });
+
+        $("#resumoEndereco").html(`${MEU_ENDERECO.endereco}, ${MEU_ENDERECO.numero}, ${MEU_ENDERECO.bairro}`);
+        $("#cidadeEndereco").html(`${MEU_ENDERECO.cidade}-${MEU_ENDERECO.uf} / ${MEU_ENDERECO.cep} ${MEU_ENDERECO.complemento}`);
+
+        cardapio.metodos.finalizarPedido();
+
+    },
+
+    // Atualiza o link do botão do WhatsApp
+    finalizarPedido: () => {
+
+        if (MEU_CARRINHO.length > 0 && MEU_ENDERECO != null) {
+
+            var texto = 'Olá! gostarida fazer um pedido:';
+            texto += `\n*Itens do pedido:*\n\n\${itens}`;
+            texto += `\n*Endereço de entrega:*`;
+            texto += `\n${MEU_ENDERECO.endereco}, ${MEU_ENDERECO.numero}, ${MEU_ENDERECO.bairro}`;
+            texto += `\n${MEU_ENDERECO.cidade}-${MEU_ENDERECO.uf} / ${MEU_ENDERECO.cep} ${MEU_ENDERECO.complemento}`;
+            texto += `\n\n*Total (com entrega): R$ ${(VALOR_CARRINHO + VALOR_ENTREGA).toFixed(2).replace('.',',')}*`;
+
+            var itens = '';
+
+            $.each(MEU_CARRINHO, (i, e) => {
+
+                itens += `*${e.qntd}x* ${e.name} ....... R$ ${e.price.toFixed(2).replace('.',',')} \n`;
+
+                // último item
+                if ((i + 1) == MEU_CARRINHO.length) {
+
+                    texto = texto.replace(/\${itens}/g, itens);
+
+                    console.log(texto)
+
+                }
+
+
+                //https://wa.me/5511986778895?text=Olá
+            })
+        }
         
     },
 
@@ -507,6 +565,25 @@ cardapio.templates = {
             <span class="btn btn-remove" onclick="cardapio.metodos.removerItemCarrinho('\${id}')"><i class="fa fa-times"></i></span>
         </div>
     </div>
+    `,
+
+    itemResumo: `
+        <div class="col-12 item-carrinho resumo">
+            <div class="img-produto-resumo">
+                <img src="\${img}">
+            </div>
+            <div class="dados-produto">
+                <p class="title-produto-resumo">
+                    <strong>\${nome}</strong>
+                </p>
+                <p class="price-produto-resumo">
+                    <strong>R$ \${preco}</strong>
+                </p>
+            </div>
+                <p class="quantidade-produto-resumo">
+                    x <strong>\${qntd}</strong>
+                </p>
+        </div>
     `
 
 }
