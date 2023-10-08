@@ -556,6 +556,7 @@ cardapio.metodos = {
         let URL = `https://wa.me/${CELULAR_EMPRESA}/?text=${encode}`;
 
         $("#btnWattsapp").attr('href', URL);
+        $("#btnWattsapp-1").attr('href', URL);
 
     },
 
