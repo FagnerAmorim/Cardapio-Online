@@ -1,12 +1,13 @@
 @charset "UTF-8";
+
 @font-face {
     font-family: 'PoppinsMedium';
-    src: url('./fonts/Poppins-Medium.otf');
+    src: url('../fonts/Poppins-Medium.otf');
 }
 
 @font-face {
     font-family: 'PoppinsRegular';
-    src: url('./fonts/Poppins-Regular.otf');
+    src: url('../fonts/Poppins-Regular.otf');
 }
 
 :root {
@@ -16,7 +17,7 @@
     --color-text: #4f4f4f;
     --color-text-out:#90908e;
     --color-primary: #ffbf00;
-    --color-secundary: #f7d675;;
+    --color-secundary: #fae091;
     --color-white: #ffffff;
     --color-red: #e74c3c;
     --color-green: #2ecc71;
